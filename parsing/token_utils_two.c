@@ -57,7 +57,7 @@ static int	find_token_end(int start, char *str)
 	i = start;
 	if (find_token_type(str[start]) == TOKEN_WORD)
 	{
-		while (str[i] && str[i] != '|' && str[i] != '<' && str[i] != '>')
+		while (str[i] && str[i] != '|')
 			i++;
 		return (i);
 	}

@@ -99,12 +99,12 @@ t_token_type	find_token_type(char c)
 
 int	ft_only_operators_word(char *input, int start, int end)
 {
-	t_token_type	type;
+	char	c;
 
-	type = find_token_type(input[start]);
+	c = '|';
 	while (++start < end)
 	{
-		if (type != find_token_type(input[start]))
+		if (c == (input[start]))
 			return (-1);
 	}
 	return (0);

@@ -4,7 +4,6 @@
 
 #include <stdbool.h>
 
-
 typedef enum e_token_type
 {
 	TOKEN_WORD,
@@ -59,7 +58,6 @@ typedef struct s_env
 	char			*value;
 	struct s_env	*next;
 }			t_env;
-
 
 typedef struct s_mini
 {

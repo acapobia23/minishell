@@ -112,7 +112,7 @@ int	parsing(t_mini **mini, const char *input)
 	// if (lexer_tokens(tokens) == -1)//TODO attua l'exspander
 	// {
 	// 	clear_tokens(&tokens);
-	// 	ft_exit(2, "lexer tokens error", &(*mini));
+	// 	ft_exit(2, "input error", &(*mini));
 	// }
 	// printf("\n\nAFTER LEXER\n\n");
 	// print_tokens(tokens);
