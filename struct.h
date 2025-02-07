@@ -27,7 +27,7 @@ typedef struct s_token
 {
 	t_token_type	type_token;
 	char			*arg;
-	t_flag			flag;
+	t_flag			*flag;
 	struct s_token	*next;
 }			t_token;
 
@@ -35,7 +35,7 @@ typedef struct s_cmd
 {
 	char	*cmd;
 	char	*option;
-	char	*arg;
+	char	**arg;
 	char	*redirect;
 	char	*file;
 	bool	flag_cmd;//vede se è un cmd o una redirect

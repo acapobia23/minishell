@@ -1,4 +1,5 @@
-SRC =	main.c clear_functions.c handle_signal.c data_init.c parsing_e_token.c
+SRC =	main.c clear_functions.c handle_signal.c data_init.c parsing/parsing_e_token.c parsing/token_utils.c \
+		parsing/token_utils_two.c test.c
 		
 NAME = minishell
 LIBFT_DIR = libft

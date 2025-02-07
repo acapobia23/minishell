@@ -1,5 +1,22 @@
 #include "mini.h"
 
+void	clear_tokens(t_token **tokens)
+{
+	t_token	*tmp;
+	t_token	*next;
+
+	next = NULL;
+	tmp = (*tokens);
+	while (tmp)
+	{
+		next = tmp->next;
+		free(tmp->arg);
+		free(tmp->flag);
+		free(tmp);
+		tmp = next;
+	}
+}
+
 void	ft_free_env(t_env **env)
 {
 	t_env	*tmp;
