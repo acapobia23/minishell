@@ -1,28 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_toupper.c                                       :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acapobia <acapobia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ltrento <ltrento@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/10 17:38:40 by acapobia          #+#    #+#             */
-/*   Updated: 2023/10/21 00:41:05 by acapobia         ###   ########.fr       */
+/*   Created: 2025/02/07 21:14:50 by ltrento           #+#    #+#             */
+/*   Updated: 2025/02/07 21:31:00 by ltrento          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+int    pwd_builtin(void)
+{
+    char    pwd[4096];
 
-int	ft_toupper(int c)
-{
-	if (c >= 97 && c <= 122)
-		c = c -32;
-	return (c);
+    if (!getcwd(pwd, sizeof(pwd)))
+    {
+        perror("pwd");
+        return (1);
+    }
+    else
+        printf("%s\n", pwd);
+    return (0);
 }
-/*
-int main()
-{
-	char c = 'A';
-	char res = ft_toupper(c);
-	write(1, &res, 1);
-	return 0;
-}*/
