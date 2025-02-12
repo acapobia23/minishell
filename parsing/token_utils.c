@@ -1,5 +1,38 @@
 #include "../mini.h"
 
+static int	find_both_case(char *arg)
+{
+	int	sing;
+	int	doub;
+	int	i;
+
+	i = 0;
+	sing = 0;
+	doub = 0;
+	while (arg[i])
+	{
+		if (arg[i] == '\'')
+		{
+			sing = 1;
+			i++;
+			while (arg[i] && arg[i] != '\'')
+				i++;
+		}
+		if (arg[i] == '"')
+		{
+			doub = 1;
+			i++;
+			while (arg[i] && arg[i] != '"')
+				i++;
+		}
+		i++;
+	}
+	if (sing == 1 && doub == 1)
+		return (0);
+	else
+		return (-1);
+}
+
 static void	active_other_case(t_flag *new, char *arg)
 {
 	int	i;
@@ -24,6 +57,7 @@ static void	active_other_case(t_flag *new, char *arg)
 	}
 }
 
+
 static int	find_quotes(char *arg)
 {
 	int	q_single;
@@ -43,6 +77,8 @@ static int	find_quotes(char *arg)
 			break ;
 		i++;
 	}
+	if (find_both_case(arg) == 0)
+		return (3);
 	if (q_double != 0)
 		return (2);
 	else if (q_single != 0)
@@ -71,16 +107,21 @@ t_flag	*active_flag(char *arg)
 	new = ft_calloc(1, sizeof(t_flag));
 	if (!new)
 		return (NULL);
-	flag_init(new);//TODO
-	quotes = find_quotes(arg);//TODO 0 = nessuna, 1 = singole, 2 = doppie
+	flag_init(new);
+	quotes = find_quotes(arg);//TODO 0 = nessuna, 1 = singole, 2 = doppie 3 = entrmabe ma separate
 	if (quotes == 1)
 		new->singol_quotes = true;
 	else if (quotes == 2)
 		new->double_quotes = true;
+	else if (quotes == 3)
+	{
+		new->singol_quotes = true;
+		new->double_quotes = true;
+	}
 	i = -1;
 	while (arg[++i])
 	{
-		if (arg[i] == '$')
+		if (arg[i] == '$' && new->singol_quotes == false)
 		{
 			new->dollar = true;
 			break ;
@@ -97,15 +138,3 @@ t_token_type	find_token_type(char c)
 	return (TOKEN_WORD);
 }
 
-int	ft_only_operators_word(char *input, int start, int end)
-{
-	char	c;
-
-	c = '|';
-	while (++start < end)
-	{
-		if (c == (input[start]))
-			return (-1);
-	}
-	return (0);
-}

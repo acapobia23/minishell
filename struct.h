@@ -33,7 +33,6 @@ typedef struct s_token
 typedef struct s_cmd
 {
 	char	*cmd;
-	char	*option;
 	char	**arg;
 	char	*redirect;
 	char	*file;

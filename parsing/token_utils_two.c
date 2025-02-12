@@ -1,5 +1,32 @@
 #include "../mini.h"
 
+int	find_word_end(int start, char *input)
+{
+	int		i;
+	char	quotes;
+
+	quotes = '\0';
+	i = start;
+	if (input[start] == '\0')
+		return (start);
+	while (input[i])
+	{
+		if (input[i] == '"' || input[i] == '\'')
+		{
+			if (quotes == '\0')
+				quotes = input[i];
+			else if (quotes == input[i])
+				quotes = '\0';
+		}
+		if (input[i] == '|' && quotes == '\0')
+			break ;
+		if (ft_isspace(input[i]) == 0 && quotes == '\0')
+			break ;
+		i++;
+	}
+	return (i);
+}
+
 char *ft_strcut(int start, int end, char *input)
 {
 	char	*s;
@@ -9,6 +36,7 @@ char *ft_strcut(int start, int end, char *input)
 	i = start;
 	if (!input)
 		return (NULL);
+	len = 0;
 	while (i < end)
 	{
 		len++;
@@ -29,63 +57,31 @@ char *ft_strcut(int start, int end, char *input)
 	return (s);
 }
 
-static int	find_end(int start, char *input)
-{
-	if (input[start] == '|')
-		return (start + 1);
-	else if (input[start] == '<')
-	{
-		if (input[start + 1] == '<')
-			return (start + 2);
-		else
-			return (start + 1);
-	}
-	else if (input[start] == '>')
-	{
-		if (input[start + 1] == '>')
-			return (start + 2);
-		else
-			return (start + 1);
-	}
-	return (start + 1);
-}
-
-static int	find_token_end(int start, char *str)
+int	find_op_end(int start, char *input)
 {
 	int	i;
 
 	i = start;
-	if (find_token_type(str[start]) == TOKEN_WORD)
+	if (input[i] == '|')
+		i++;
+	else if (input[i] == '<')
 	{
-		while (str[i] && str[i] != '|')
+		while (input[i] == '<')
 			i++;
-		return (i);
 	}
-	else
-		return (find_end(start, str));
-	return (start);
+	else if (input[i] == '>')
+	{
+		while (input[i] == '>')
+			i++;
+	}
+	return (i);
 }
 
-void	multiple_token(t_token **new, char *input, int start, int end)
+int	find_token_end(int start, char *str, int end)
 {
-	t_token	*tmp;
-	int		to_end;
-	int		to_start;
-
-	to_end = find_token_end(start, input);
-	(*new)->type_token = find_token_type(input[start]);
-	(*new)->arg = ft_strcut(start, to_end, input);
-	(*new)->flag = active_flag((*new)->arg);
-	(*new)->next = NULL;
-	tmp = (*new);
-	to_start = to_end;
-	while (to_start < end)
-	{
-		to_end = find_token_end(to_start, input);
-		tmp->next = new_token(to_start, to_end, input);
-		if (!tmp)
-			return ;
-		to_start = to_end;
-		tmp = tmp->next;
-	}
+	if (find_token_type(str[start]) == TOKEN_WORD)
+		return (end);
+	else
+		return (find_op_end(start, str));
+	return (start);
 }

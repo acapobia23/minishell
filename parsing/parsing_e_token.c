@@ -1,5 +1,7 @@
 #include "../mini.h"
 
+
+
 t_token	*new_token(int start, int end, char *input)
 {
 	t_token	*new;
@@ -7,19 +9,16 @@ t_token	*new_token(int start, int end, char *input)
 	new = NULL;
 	new = ft_calloc(1, sizeof(t_token));
 	if (!new)
+		return (NULL);
+	new->type_token = find_token_type(input[start]);
+	new->arg = ft_strcut(start, end, input);
+	if (!new->arg)
 	{
-		free(input);
+		free(new);
 		return (NULL);
 	}
-	if (ft_only_operators_word(input, start, end) == 0)
-	{
-		new->type_token = find_token_type(input[start]);
-		new->arg = ft_strcut(start, end, input);
-		new->flag = active_flag(new->arg);
-		new->next = NULL;
-	}
-	else
-		multiple_token(&new, input, start, end);
+	new->flag = active_flag(new->arg);
+	new->next = NULL;
 	return (new);
 }
 
@@ -30,6 +29,7 @@ static int	add_token(t_token **tokens, int start, int end, char *input)
 
 	current = NULL;
 	new = new_token(start, end, input);
+	printf("token done\n");
 	if (!new)
 	{
 		clear_tokens(&(*tokens));
@@ -47,32 +47,16 @@ static int	add_token(t_token **tokens, int start, int end, char *input)
 	return (0);
 }
 
-static int	jump_token(int i,const char *input)
+int	jump_token(int i,const char *input)
 {
-	int	single;
-	int	doubles;
-	int	res;
+	int	j;
 
-	single = 0;
-	doubles = 0;
-
-	while (input[i] != '\0')
-	{
-		if (input[i] == '\'' && doubles == 0)
-			single += 1;
-		if (input[i] == '"' && single == 0)
-			doubles += 1;
-		if (single == 2)
-			single = 0;
-		if (doubles == 2)
-			doubles = 0;
-		if (ft_isspace(input[i]) == 0 && single == 0 && doubles == 0)
-			break ;
-		i++;
+	if (find_token_type(input[i]) == TOKEN_WORD)
+		j = find_word_end(i, (char *)input);
+	else
+		j = find_op_end(i, (char *)input);
+	return (j);
 	}
-	res = i;
-	return (res);
-}
 
 static t_token	*setup_tokens(const char *input_promt)
 {
@@ -109,13 +93,13 @@ int	parsing(t_mini **mini, const char *input)
 	if (!tokens)
 		ft_exit(2, "tokens setup error", &(*mini));
 	print_tokens(tokens);
-	// if (lexer_tokens(tokens) == -1)//TODO attua l'exspander
-	// {
-	// 	clear_tokens(&tokens);
-	// 	ft_exit(2, "input error", &(*mini));
-	// }
-	// printf("\n\nAFTER LEXER\n\n");
-	// print_tokens(tokens);
+	if (lexer_tokens(&tokens) == -1)//TODO attua l'exspander
+	{
+		clear_tokens(&tokens);
+		return (-1);
+	}
+	printf("\n\nAFTER LEXER\n\n");
+	print_tokens(tokens);
 	// (*mini)->cmd = set_cmds(tokens);//TODO trasferisce i token in cmd dividendoli
 	// if (!(*mini)->cmd)
 	// {

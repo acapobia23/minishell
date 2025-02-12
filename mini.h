@@ -24,12 +24,16 @@
 extern volatile sig_atomic_t	g_received_signal;
 
 void print_tokens(t_token *token);//test only
+int	            lexer_tokens(t_token **tokens);
+int	            find_flag(t_flag *flag, char *c);
+int	            find_word_end(int start, char *input);
+int	            find_op_end(int start, char *input);
+int	            find_token_end(int start, char *str, int end);
 void			clear_tokens(t_token **tokens);
-void			multiple_token(t_token **new, char *input, int start, int end);
+int	            jump_token(int i,const char *input);
 t_token			*new_token(int start, int end, char *input);
 t_flag			*active_flag(char *arg);
 char 			*ft_strcut(int start, int end, char *input);
-int				ft_only_operators_word(char *input, int start, int end);
 t_token_type	find_token_type(char c);
 int				parsing(t_mini **mini, const char *input);
 void			ft_free_env(t_env **env);

@@ -1,90 +1,130 @@
 #include "../mini.h"
 
-static void	dollar_case(t_token *token)
+static int	ft_new_len(char *old, char c)
 {
+	int	i;
+	int	len;
 
+	len = 0;
+	i = 0;
+	while (old[i])
+	{
+		if (old[i] == c)
+			i++;
+		else
+		{
+			len++;
+			i++;
+		}
+	}
+	printf("new len %i | old len %i\n", len, i);
+	return (len);
 }
 
-static int	trim_quotes(t_token *token, char c)
+static char	*ft_mystrtrim(char *old, char c)
 {
+	char	*new;
+	int		len;
+	int		j;
 	int		i;
-	int		quotes;
+
+	i = 0;
+	j = 0;
+	len = ft_new_len(old, c);
+	new = ft_calloc((len + 1), sizeof(char));
+	if (!new)
+		return (NULL);
+	while (old[i])
+	{
+		if (old[i] != c)
+		{
+			new[j] = old[i];
+			j++;
+		}
+		i++;
+	}
+	new[j] = '\0';
+	return (new);
+}
+
+static int	trim_quote(t_token **curr, char quote)
+{
 	char	*tmp;
 
-	i = -1;
-	quotes = 0;
-	while(token->arg[++i])
-	{
-		if (token->arg[i] == c)
-			quotes++;
-	}
-	if (quotes < 2 || quotes % 2 != 0)
-		return (-1);
-	tmp = ft_strtrim((const char*)token->arg, c);
+	tmp = ft_strdup((const char *)(*curr)->arg);
 	if (!tmp)
 		return (-1);
-	free(token->arg);
-	token->arg = ft_strdup((const char*)tmp);
-	if (!token->arg)
-	{
-		free(tmp);
-		return (-1);
-	}
+	free((*curr)->arg);
+	(*curr)->arg = ft_mystrtrim(tmp, quote);
 	free(tmp);
+	if (!(*curr)->arg)
+		return (-1);
 	return (0);
 }
 
-static	int	find_flag(t_flag flag, const char *str)
+static int	count_quote(char *str, char quote)
 {
-	if (str[0] == '\'')
+	int	counter;
+	int	i;
+
+	counter = 0;
+	i = -1;
+	while (str[++i])
 	{
-		if (flag.singol_quotes == true)
-			return (0);
-		else
-			return (-1);
+		if (str[i] == quote)
+			counter++;
 	}
-	if (str[0] == '"')
-	{
-		if (flag.double_quotes == true)
-			return (0);
-		else
-			return (-1);
-	}
-	if (str[0] == '$')
-	{
-		if (flag.dollar == true)
-			return (0);
-		else
-			return (-1);
-	}
+	if (counter % 2 != 0)
+		return (-1);
+	return (0);
 }
 
-int	lexer_tokens(t_token *tokens)
+static int	handle_quote(t_token **curr, char quote)
 {
-	t_token	*tmp;
-
-	tmp = tokens;
-	while (tmp)
+	if (count_quote((*curr)->arg, quote) == -1)
 	{
-		if (find_flag(tmp->flag, "'") == 0)
+		if (quote == '\'')
+			printf("single quote error, i can't process the input\n");
+		if (quote == '"')
+			printf("double quote error, i can't process the input\n");
+		return(-1);	
+	}
+	if (quote == '\'')
+	{
+		if (trim_quote(&(*curr), quote) == -1)
+			return (-1);
+	}
+	else if (quote == '"')
+	{
+		if (trim_quote(&(*curr), quote) == -1)
+			return (-1);
+	}
+	return (0);
+}
+
+int	lexer_tokens(t_token **tokens)
+{
+	t_token	*curr;
+
+	curr = (*tokens);
+	while (curr)
+	{
+		if (curr->flag->double_quotes == true)
 		{
-			if (trim_quotes(tmp, '\'') == -1)// check se sono doppie senno return -1
-			{
-				printf("quotes ' sorry i can't go for the execution\n");
+			if (handle_quote(&curr, '"') == -1)
 				return (-1);
-			}
 		}
-		if(find_flag(tmp->flag, "\"") == 0)
+		if (curr->flag->singol_quotes == true)
 		{
-			if (trim_quotes(tmp, '"') == -1)// check se sono doppie senno return -1
-			{
-				printf("only one \" sorry i can't go for the execution\n");
+			if (handle_quote(&curr, '\'') == -1)//sono invertiti da risolvere pero done 
 				return (-1);
-			}
 		}
-		if (find_flag(tmp->flag, "$") == 0 && find_flag(tmp->flag, "\"") == 0)
-			dollar_case(tmp);//TODO
-		tmp = tmp->next;
+		// if (find_flag(curr->flag, '$') && find_flag(curr->flag, '\'') == -1)
+		// {
+		// 	if (handle_dollar(curr) == -1)
+		// 		return (-1);
+		// }
+		curr = curr->next;
 	}
 	return (0);
 }
