@@ -24,7 +24,26 @@
 extern volatile sig_atomic_t	g_received_signal;
 
 void print_tokens(t_token *token);//test only
-int	            lexer_tokens(t_token **tokens);
+int				handle_dollar_quoted(t_token *curr, t_mini *mini);
+char			*new_dollar_value(char *arg, int *i, t_mini *mini);
+char			*cut_value_to_replace(char *arg, int start);
+int	            ft_count_dollar(char *arg);
+int	            handle_dollar(t_token *curr, t_mini *mini);
+char	        *replace_value(char *value_rp,t_mini *mini);
+void	        ft_join_dollar(t_token *curr, int *i, char *value);
+void        	ft_free_mtx(char **matrix);
+char	        *ft_mystrjoin(char **mtx);
+int         	handle_both(t_token *curr);
+char	        **ft_split_quote(char *arg);
+int	            skip_quote(char *arg, int start);
+int             ft_new_len(char *old, char c);
+char	        *ft_mystrtrim(char *old, char c);
+int	            trim_quote(t_token **curr, char quote);
+int         	count_quote(char *str, char quote);
+int	            handle_quote(t_token **curr, char quote);
+int	            handle_quotes_managar(t_token *curr);
+
+int	            lexer_tokens(t_token **tokens, t_mini *mini);
 int	            find_flag(t_flag *flag, char *c);
 int	            find_word_end(int start, char *input);
 int	            find_op_end(int start, char *input);

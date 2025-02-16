@@ -93,7 +93,7 @@ int	parsing(t_mini **mini, const char *input)
 	if (!tokens)
 		ft_exit(2, "tokens setup error", &(*mini));
 	print_tokens(tokens);
-	if (lexer_tokens(&tokens) == -1)//TODO attua l'exspander
+	if (lexer_tokens(&tokens, (*mini)) == -1)//TODO attua l'exspander
 	{
 		clear_tokens(&tokens);
 		return (-1);

@@ -121,7 +121,7 @@ t_flag	*active_flag(char *arg)
 	i = -1;
 	while (arg[++i])
 	{
-		if (arg[i] == '$' && new->singol_quotes == false)
+		if (arg[i] == '$' && (new->singol_quotes == false || (new->singol_quotes == true && new->double_quotes == true)))
 		{
 			new->dollar = true;
 			break ;

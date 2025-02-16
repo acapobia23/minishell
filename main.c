@@ -4,8 +4,8 @@ int	main(int ac, char **arg, char **envp)
 {
 	t_mini	*mini;
 	char	*input;
-
-	if (ac != 1 && arg)
+	(void)arg;
+	if (ac != 1)
 		ft_exit(0, "no addictional argument required", &mini);
 	mini = NULL;
 	if (setup_mini(&mini, envp) == -1)

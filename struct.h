@@ -4,6 +4,12 @@
 
 #include <stdbool.h>
 
+typedef struct	s_dollar
+{
+	char	**mtx;
+	int		new_len;
+}			t_dollar;
+
 typedef enum e_token_type
 {
 	TOKEN_WORD,
