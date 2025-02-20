@@ -18,7 +18,7 @@ int	main(int ac, char **arg, char **envp)
 		if(!input)
 			ft_exit(0, "capo-mini exit", &mini);
 		add_history(input);
-		if (parsing(&mini, input) == 0)//TODO at the end check cmd o operetors
+		if (parsing(&mini, input) == 0)// at the end check cmd o operetors
 			printf("parsing done\n");
 		// 	cmd_executor(&mini);//TODO check se i comandi esistono, esegue libera dentro di se i campi necessari
 		free(input);
