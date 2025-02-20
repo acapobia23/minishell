@@ -1,5 +1,37 @@
 #include "mini.h"
 
+void	ft_free_cmd(t_mini *mini)
+{
+	int	i;
+
+	i = -1;
+	while (++i < mini->process->n_pid)
+	{
+		ft_free_mtx(mini->cmd->arg);
+		free(mini->cmd->cmd);
+		free(mini->cmd->file);
+		free(mini->cmd->redirect);
+	}
+	free(mini->cmd);
+}
+
+void	clear_tokens(t_token **tokens)
+{
+	t_token	*tmp;
+	t_token	*next;
+
+	next = NULL;
+	tmp = (*tokens);
+	while (tmp)
+	{
+		next = tmp->next;
+		free(tmp->arg);
+		free(tmp->flag);
+		free(tmp);
+		tmp = next;
+	}
+}
+
 void	ft_free_env(t_env **env)
 {
 	t_env	*tmp;
@@ -31,7 +63,7 @@ void	ft_clear_mini(t_mini **mini)
 		free((*mini)->process);
 	}
 	// if ((*mini)->cmd)
-	// 	ft_free_cmd(&(*mini)->cmd)//TODO da vedere quando assegno cmd la struct completa
+	// 	ft_free_cmd(&(*mini))//TODO da vedere quando assegno cmd la struct completa
 	free((*mini));
 }
 

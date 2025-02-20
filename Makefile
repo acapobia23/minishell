@@ -1,4 +1,7 @@
-SRC =	main.c clear_functions.c handle_signal.c data_init.c parsing_e_token.c
+SRC =	main.c clear_functions.c handle_signal.c data_init.c parsing/parsing_e_token.c parsing/token_utils.c \
+		parsing/token_utils_two.c test.c parsing/lexer.c parsing/lexer_utils.c parsing/handle_quote.c \
+		parsing/handle_quote_utils.c parsing/handle_dollar.c parsing/handle_dollar_utils.c parsing/quoted_dollar.c \
+		set_cdm/set_cmd.c set_cdm/set_cmd_utils.c
 		
 NAME = minishell
 LIBFT_DIR = libft
@@ -14,27 +17,19 @@ $(LIBFT_A):
 	@make -s -C $(LIBFT_DIR)
 
 $(NAME): $(LIBFT_A)
-	$(CC) $(CFLAGS) -o $(NAME) $(SRC) $(LDFLAGS)
+	@$(CC) $(CFLAGS) -o $(NAME) $(SRC) $(LDFLAGS)
 
 clean:
 	@make -s -C $(LIBFT_DIR) clean $(LIBFT)
-	$(RM) $(OBJ)
+	@$(RM) $(OBJ)
 
 fclean: clean
 	@make -s -C $(LIBFT_DIR) fclean $(LIBFT)
-	$(RM) $(NAME)
+	@$(RM) $(NAME)
 
 re: fclean all
 
 credit:
-	@echo "\033[38;5;51m Made by : \033[0m"
-	@echo "_________                      _________ _______       .___      "
-	@echo "\_   ___ \_____  ______   ____ \_   ___ \\   _  \    __| _/____  "
-	@echo "/    \  \/\__  \ \____ \ /  _ \/    \  \//  /_\  \  / __ |/ __ \ "
-	@echo "\     \____/ __ \|  |_> >  <_> )     \___\  \_/   \/ /_/ \  ___/ "
-	@echo " \______  (____  /   __/ \____/ \______  /\_____  /\____ |\___  >"
-	@echo "        \/     \/|__|                  \/       \/      \/    \/"
-	@echo ""
 	@echo "\033[38;5;51m minishell ready to start \033[1;38;5;39m Compiled\033[0m"
 
 .PHONY: all clean fclean re
