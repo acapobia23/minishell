@@ -29,7 +29,6 @@ int	make_cmd(t_cmd *cmd, t_token **curr)
 	counter = 1;
 	while ((*curr) && (*curr)->flag->pipe == false)
 	{
-		printf("token corrente : %s\n",(*curr)->arg);
 		if ((*curr)->type_token == TOKEN_OPERATOR)
 			put_redirect(&(*curr), cmd);
 		else if (counter == 1)
@@ -87,7 +86,6 @@ void	set_cmds(t_token *tokens, t_mini **mini)
 	(*mini)->cmd = ft_init_ar_cmd(tokens, (*mini));//conta i cmd e li alloca, setta pid
 	if (!(*mini)->cmd)
 		return ;
-	printf("n_pid :%i\n", (*mini)->process->n_pid);
 	while (++i < (*mini)->process->n_pid)
 	{
 		if (make_cmd(&(*mini)->cmd[i], &curr) == -1)//TODO setta i comandi e scorre curr per i prossimi cmd se curr !NULL
@@ -95,6 +93,5 @@ void	set_cmds(t_token *tokens, t_mini **mini)
 			ft_free_cmd((*mini));
 			return ;
 		}
-		printf("giri in set_cmd\n");
 	}
 }

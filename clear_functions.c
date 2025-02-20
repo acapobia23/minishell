@@ -62,8 +62,8 @@ void	ft_clear_mini(t_mini **mini)
 			free((*mini)->process->id_current);
 		free((*mini)->process);
 	}
-	// if ((*mini)->cmd)
-	// 	ft_free_cmd(&(*mini))//TODO da vedere quando assegno cmd la struct completa
+	if ((*mini)->cmd)
+		ft_free_cmd(&(*mini))//TODO da vedere quando assegno cmd la struct completa
 	free((*mini));
 }
 
