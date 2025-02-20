@@ -33,7 +33,7 @@ int	lexer_tokens(t_token **tokens, t_mini *mini)
 		{
 			if (curr->flag->dollar == true)
 			{
-				if (handle_dollar_quoted(curr, mini) == -1)//TODO
+				if (handle_dollar_quoted(curr, mini) == -1)
 				return (-1);
 			}				
 			if (handle_quotes_managar(curr) == -1)

@@ -20,7 +20,8 @@ int	ft_isalnum(int c)
 		{
 			if (c < '0' || c > '9')
 			{
-				return (0);
+				if (c != '?' && c != '_')
+					return (0);
 			}
 		}
 	}

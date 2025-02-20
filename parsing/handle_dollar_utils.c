@@ -17,7 +17,7 @@ static int	ft_len_dollar(char *old, char *value)
 		{
 			i++;
 			counter++;
-			while (old[i] && old[i] != '$' &&ft_isspace(old[i]) != 0)
+			while (old[i] && old[i] != '$' && ft_isalnum(old[i]) != 0)
 				i++;
 		}
 		else
@@ -35,7 +35,7 @@ static int	last_part_str(int i, char *old)
 
 	if (old[i] == '$')
 		i++;
-	while ((old[i] && ft_isalnum(old[i])) || old[i] == '_')
+	while (old[i] && ft_isalnum(old[i]))
 		i++;
 	new_i = i;
 	return (new_i);
@@ -50,6 +50,7 @@ static char *ft_new_str(char *old,  char *value, int start)
 	int		j;
 
 	len = ft_len_dollar(old, value);
+	printf("len : %i\nold : %s\nvalue : %s\n", len, old, value);
 	new = ft_calloc((len + 1), sizeof(char));
 	if (!new)
 		return (NULL);

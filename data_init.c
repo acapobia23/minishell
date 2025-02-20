@@ -46,12 +46,13 @@ int	setup_mini(t_mini **mini, char **envp)
 		return (-1);
 	(*mini)->exit_code = 0;
 	(*mini)->cmd = NULL;
-	(*mini)->env = env_init(envp);//TODO
+	(*mini)->env = env_init(envp);
 	if (!(*mini)->env)
 		return (-1);
 	(*mini)->process = ft_calloc(1, sizeof(t_pid));
 	(*mini)->process->id_current = NULL;
 	if (!(*mini)->process)
 		return (-1);
+	(*mini)->process->n_pid = 0;
 	return (0);
 }

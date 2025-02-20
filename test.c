@@ -13,6 +13,30 @@ static void print_token_flags(t_flag *flag)
     printf("  Delimiter: %s\n", flag->delimiter ? "true" : "false");
 }
 
+void print_cmds(t_cmd *cmds, int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        printf("Comando %d:\n", i + 1);
+        printf("  cmd: %s\n", cmds[i].cmd ? cmds[i].cmd : "NULL");
+
+        printf("  arg: ");
+        if (cmds[i].arg)
+        {
+            for (int j = 0; cmds[i].arg[j]; j++)
+                printf("\"%s\" ", cmds[i].arg[j]);
+        }
+        else
+            printf("NULL");
+        printf("\n");
+
+        printf("  redirect: %s\n", cmds[i].redirect ? cmds[i].redirect : "NULL");
+        printf("  file: %s\n", cmds[i].file ? cmds[i].file : "NULL");
+        printf("  flag_cmd: %s\n", cmds[i].flag_cmd ? "true" : "false");
+        printf("--------------------------------\n");
+    }
+}
+
 void print_tokens(t_token *token)
 {
     char    *s = "WORD";

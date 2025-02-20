@@ -29,7 +29,6 @@ static int	add_token(t_token **tokens, int start, int end, char *input)
 
 	current = NULL;
 	new = new_token(start, end, input);
-	printf("token done\n");
 	if (!new)
 	{
 		clear_tokens(&(*tokens));
@@ -91,21 +90,22 @@ int	parsing(t_mini **mini, const char *input)
 
 	tokens = setup_tokens(input);
 	if (!tokens)
-		ft_exit(2, "tokens setup error", &(*mini));
-	print_tokens(tokens);
-	if (lexer_tokens(&tokens, (*mini)) == -1)//TODO attua l'exspander
+		return (1);
+	if (lexer_tokens(&tokens, (*mini)) == -1)
 	{
 		clear_tokens(&tokens);
 		return (-1);
 	}
-	printf("\n\nAFTER LEXER\n\n");
-	print_tokens(tokens);
-	// (*mini)->cmd = set_cmds(tokens);//TODO trasferisce i token in cmd dividendoli
-	// if (!(*mini)->cmd)
-	// {
-	// 	clear_tokens(&tokens);
-	// 	ft_exit(2, "set_cmd error", &(*mini));
-	// }
+	// printf("\n\nAFTER LEXER\n\n");
+	// print_tokens(tokens);
+	set_cmds(tokens, &(*mini));//TODO trasferisce i token in cmd dividendoli
+	if (!(*mini)->cmd)
+	{
+		clear_tokens(&tokens);
+		printf("set_cmd error\n");
+		return (1);
+	}
+	print_cmds((*mini)->cmd, (*mini)->process->n_pid);
 	// set_process((*mini)->process, (*mini)->cmd);
 	// ft_test(tokens, (*mini));//TODO DEBUG ONLY stampa tutti i campi delle due struct
 	clear_tokens(&tokens);// TODOfree tokens

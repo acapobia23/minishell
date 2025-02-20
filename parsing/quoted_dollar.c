@@ -8,8 +8,6 @@ static int	case_dollar_normal(int pos,t_token *curr, t_mini *mini)
 	if (!value)
 		return (-1);
 	ft_join_dollar(curr, &pos, value);
-	printf("value to replace : %s\n", value);
-	printf("new str : %s\n", curr->arg);
 	free(value);
 	if (pos == -1)
 		return (-1);
@@ -47,7 +45,6 @@ static int	handle_dollar_limit(t_token *curr, int pos)
 		i++;
 	}
 	free(tmp);
-	printf("new str : %s\n", curr->arg);
 	return (0);
 }
 
@@ -97,7 +94,6 @@ static int	quoted_dollar(int count, t_token *curr, t_mini *mini)
 	pos = find_pos(count, curr->arg);//-1 se non trova nada ma non deve tornare in handle errore
 	if (pos == -1)
 		return (0);
-	printf("pos trovata : %c\n", curr->arg[pos]);
 	if (inside_single(pos, curr->arg) == 0)// 0 il dollaro corrente è dentro le singole
 		return (0);
 	else if (curr->arg[pos + 1] == '\'' || curr->arg[pos + 1] == '"')
@@ -124,13 +120,11 @@ int	handle_dollar_quoted(t_token *curr, t_mini *mini)
 	int		i;
 
 	count = ft_count_dollar(curr->arg);
-	printf("count : %i\n", count);
 	if (count == 0)
 		return (0);
 	i = 1;
 	while (i <= count)
 	{
-		printf("i count : %i\n", i);
 		check = quoted_dollar(i, curr, mini);// 1 stringa modificata quindi rifare il conteggio
 		if (check == 1)
 		{

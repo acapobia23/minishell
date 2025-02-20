@@ -6,8 +6,13 @@ char	*cut_value_to_replace(char *arg, int start)
 	char	*value;
 
 	end = start;
-	while (arg[end] != '$' && ft_isalnum(arg[end]) != 0)
+	if (arg[end] == '?')
 		end++;
+	else
+	{
+		while (arg[end] != '$' && ft_isalnum(arg[end]) != 0)
+			end++;
+	}
 	value = ft_strcut(start, end, arg);
 	if (!value)
 		return (NULL);
@@ -26,7 +31,7 @@ char	*new_dollar_value(char *arg, int *i, t_mini *mini)
 	free(value_rp);
 	if (!new)
 		return (NULL);
-	while (arg[(*i)] && arg[(*i)] != '$' && ft_isalnum(arg[(*i)]) != 0)
+	while (arg[(*i)] && arg[(*i)] != '$' && (ft_isalnum(arg[(*i)]) != 0))
 		(*i)++;
 	return (new);
 }
