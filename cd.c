@@ -6,7 +6,7 @@
 /*   By: ltrento <ltrento@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 21:15:05 by ltrento           #+#    #+#             */
-/*   Updated: 2025/02/11 22:59:48 by ltrento          ###   ########.fr       */
+/*   Updated: 2025/02/20 22:18:56 by ltrento          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,9 @@ int	cd_builtin(t_mini *mini)
 	char	old_pwd[4096];
 	char	new_pwd[4096];
 	
-	args = get_args()//CHECK WITH STRUCT
-	if (!args[0] || args[1])//replace with t_mini->t_cmd
+	if (!mini->cmd->args[0] || mini->cmd->args[1])
 	{
-		if (!args)
+		if (!mini->cmd->args)
 			perror("Error: cd: missing argument");
 		else
 			perrror("Error: cd: too many arguments");
@@ -26,7 +25,7 @@ int	cd_builtin(t_mini *mini)
 	}
 	if(!getcwd(old_pwd, 4096))
 		perror("error: cd: getcwd failed");
-	if (chdir(args[0]) != 0)//replace with t_mini->t_cmd
+	if (chdir(mini->cmd->args[0]) != 0)
 	{
 		perror("Error: cd");
 		return (1);
@@ -37,3 +36,4 @@ int	cd_builtin(t_mini *mini)
 	setenv_builtin("PWD", new_pwd, 1);
 	return (0);
 }
+//~ TILDE ???

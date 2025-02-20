@@ -6,7 +6,7 @@
 /*   By: ltrento <ltrento@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 16:17:45 by ltrento           #+#    #+#             */
-/*   Updated: 2025/02/09 17:32:15 by ltrento          ###   ########.fr       */
+/*   Updated: 2025/02/20 22:19:06 by ltrento          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int remove_env_var(t_env **env, char *arg)
     prev = NULL;
     while (current)
     {
-        if (ft_strcmp_until(current->value, arg, '=') == 0) // Match before '='
+        if (ft_strcmp_until(current->value, arg, '=') == 0)
         {
             if (prev)
                 prev->next = current->next;
