@@ -47,9 +47,10 @@ static char	**ft_dollar_mtx(char *arg, int size, t_mini *mini)
 		return (NULL);
 	i = 0;
 	j = 0;
+	mtx[size] = NULL;
 	while (arg[i])
 	{
-		if (arg[i] == '$' && arg[i - 1] != '$')
+		if (arg[i] == '$' && (i == 0 || arg[i - 1] != '$'))
 		{
 			mtx[j] = new_dollar_value(arg, &i, mini);
 			if (!mtx)
@@ -72,7 +73,7 @@ int	ft_count_dollar(char *arg)
 	size = 0;
 	while (arg[i])
 	{
-		if (arg[i] == '$' && arg[i - 1] != '$')
+		if (arg[i] == '$' && (i == 0 || arg[i - 1] != '$'))
 			size++;
 		i++;
 	}
@@ -98,6 +99,8 @@ int	handle_dollar(t_token *curr, t_mini *mini)
 	{
 		ft_join_dollar(curr, &i, dollar_mtx[j]);//TODO porta i alla fine del value del dollar
 		j++;
+		if (dollar_mtx[j] == NULL)
+			break ;
 	}
 	return (i);
 }
