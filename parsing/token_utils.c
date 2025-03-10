@@ -70,19 +70,21 @@ static int	find_quotes(char *arg)
 	while (arg[i])
 	{
 		if (arg[i] == '"' && q_single == 0)
-			q_double = 1;
+			q_double++;
 		if (arg[i] == '\'' && q_double == 0)
-			q_single = 1;
-		if (q_double != 0 || q_single != 0)
-			break ;
+			q_single++;
 		i++;
 	}
-	if (find_both_case(arg) == 0)
-		return (3);
-	if (q_double != 0)
+	if (q_double != 0 && q_single == 0)
 		return (2);
-	else if (q_single != 0)
+	else if (q_single != 0 && q_double != 0)
 		return (1);
+	else if (q_single == 1 && q_double == 0)
+		return (-1);
+	else if (q_double == 1 && q_single == 0)
+		return (-1);
+	else if (find_both_case(arg) == 0)
+		return (3);
 	return (0);
 }
 

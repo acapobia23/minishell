@@ -36,7 +36,7 @@ int	make_cmd(t_cmd *cmd, t_token **curr)
 		else if (counter > 1)
 			put_arg_cmd(&(*curr), cmd);
 		counter++;
-	}//in put.. scorrrere curr
+	}
 	// if (check_cmd(cmd) == -1)
 	// 	return (-1);
 	if ((*curr))

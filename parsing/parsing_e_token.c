@@ -96,9 +96,7 @@ int	parsing(t_mini **mini, const char *input)
 		clear_tokens(&tokens);
 		return (-1);
 	}
-	// printf("\n\nAFTER LEXER\n\n");
-	// print_tokens(tokens);
-	set_cmds(tokens, &(*mini));//TODO trasferisce i token in cmd dividendoli
+	set_cmds(tokens, &(*mini));// trasferisce i token in cmd dividendoli
 	if (!(*mini)->cmd)
 	{
 		clear_tokens(&tokens);
