@@ -6,9 +6,11 @@
 /*   By: ltrento <ltrento@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 21:14:44 by ltrento           #+#    #+#             */
-/*   Updated: 2025/02/09 16:50:07 by ltrento          ###   ########.fr       */
+/*   Updated: 2025/03/10 16:39:49 by ltrento          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../mini.h"
 
 int	scan_environ(t_env **environ, char *name)
 {
@@ -17,7 +19,7 @@ int	scan_environ(t_env **environ, char *name)
 	current = (*environ);
 	while (current)
 	{
-		if (ft_strcmp_until(current->value, name, "=") == 0)
+		if (ft_strcmp_until(current->value, name, '=') == 0)
 			return (1);
 		current = current->next;
 	}
@@ -81,7 +83,7 @@ int	setenv_builtin(const char *name, const char *value, int overwrite, t_env **e
 {
 	char	*new_entry;
 	
-	if (!value || !name || *name == '\0' || !scan_str(name, "="))
+	if (!value || !name || *name == '\0' || !scan_str(name, '='))
 		return (-1);
 	new_entry = join_env_var(name, value);
 	if (!new_entry)

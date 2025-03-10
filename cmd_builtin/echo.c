@@ -6,13 +6,13 @@
 /*   By: ltrento <ltrento@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 19:31:22 by ltrento           #+#    #+#             */
-/*   Updated: 2025/02/08 19:54:06 by ltrento          ###   ########.fr       */
+/*   Updated: 2025/02/27 16:10:55 by ltrento          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../mini.h"
 
-int	check_n_option(char *arg)
+static int	check_n_option(char *arg)
 {
 	int	i;
 
@@ -27,7 +27,7 @@ int	check_n_option(char *arg)
 	return (1);
 }
 
-void	print_arguments(char **arg, int i)
+static void	print_arguments(char **arg, int i)
 {
 	while (arg[i])
 	{
@@ -38,7 +38,7 @@ void	print_arguments(char **arg, int i)
 	}
 }
 
-void	echo_builtin(t_mini *mini)
+int	echo_builtin(t_mini *mini)
 {
 	int	no_newline;
 	int	i;
@@ -46,7 +46,7 @@ void	echo_builtin(t_mini *mini)
 	i = 0;
 	no_newline = 0;
 	if (!mini->cmd->arg || !mini->cmd->arg[0])
-		return ((void)printf("\n"));
+		return (-1);
 	while (mini->cmd->arg[i] && check_n_option(mini->cmd->arg[i]))
 	{
 		no_newline = 1;
@@ -55,4 +55,5 @@ void	echo_builtin(t_mini *mini)
 	print_arguments(mini->cmd->arg, i);
 	if (!no_newline)
 		printf("\n");
+	return (0);
 }

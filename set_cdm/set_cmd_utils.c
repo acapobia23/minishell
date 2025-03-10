@@ -52,16 +52,25 @@ void	put_arg_cmd(t_token **curr, t_cmd *cmd)
 {
 	int		i;
 	int		size;
+
 	i = 0;
 	size = ft_count_arg((*curr));
 	cmd->arg = ft_calloc((size + 1), sizeof(char *));
 	if (!cmd->arg)
-		return ;
+		return;
 	while (i < size)
 	{
-		cmd->arg[i] = ft_strdup((const char *)(*curr)->arg);
+		cmd->arg[i] = ft_strdup((*curr)->arg);
 		if (!cmd->arg[i])
-			return ;
+		{
+			while (--i >= 0)
+			{
+				free(cmd->arg[i]);
+			}
+			free(cmd->arg);
+			cmd->arg = NULL;
+			return;
+		}
 		i++;
 		(*curr) = (*curr)->next;
 	}

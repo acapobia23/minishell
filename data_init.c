@@ -23,10 +23,14 @@ static t_env	*env_init(char **envp)
 	t_env	*env;
 	int		i;
 
-	i = 0;
-	env = ft_new_env(envp[i]);
+	if (!envp || !envp[0])
+		return (NULL);
+	env = ft_new_env(envp[0]);
+	if (!env)
+		return (NULL);
 	tmp = env;
-	while (envp[++i] != NULL)
+	i = 1;
+	while (envp[i] != NULL)
 	{
 		tmp->next = ft_new_env(envp[i]);
 		if (!tmp->next)
@@ -34,6 +38,7 @@ static t_env	*env_init(char **envp)
 			ft_free_env(&env);
 			return (NULL);
 		}
+		i++;
 		tmp = tmp->next;
 	}
 	return (env);
@@ -41,18 +46,23 @@ static t_env	*env_init(char **envp)
 
 int	setup_mini(t_mini **mini, char **envp)
 {
-	(*mini) = ft_calloc(1, sizeof(t_mini));
-	if (!(*mini))
-		return (-1);
-	(*mini)->exit_code = 0;
-	(*mini)->cmd = NULL;
-	(*mini)->env = env_init(envp);
-	if (!(*mini)->env)
-		return (-1);
-	(*mini)->process = ft_calloc(1, sizeof(t_pid));
-	(*mini)->process->id_current = NULL;
-	if (!(*mini)->process)
-		return (-1);
-	(*mini)->process->n_pid = 0;
-	return (0);
+    if (!mini || !(*mini))
+        return (-1);
+
+    (*mini)->exit_code = 0;
+    (*mini)->cmd = NULL;
+    (*mini)->env = env_init(envp);
+    if (!(*mini)->env)
+        return (-1);
+
+    (*mini)->process = ft_calloc(1, sizeof(t_pid));
+    if (!(*mini)->process)
+    {
+        ft_free_env(&(*mini)->env);
+        return (-1);
+    }
+
+    (*mini)->process->id_current = NULL;
+    (*mini)->process->n_pid = 0;
+    return (0);
 }

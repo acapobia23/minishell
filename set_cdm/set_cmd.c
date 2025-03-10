@@ -70,7 +70,7 @@ static t_cmd	*ft_init_ar_cmd(t_token *tokens, t_mini *mini)
 
 	size = ft_count_cmd(tokens);
 	mini->process->n_pid = size;
-	cmd = ft_calloc(size, sizeof(t_cmd));
+	cmd = ft_calloc((size + 1), sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
 	return (cmd);
@@ -83,14 +83,15 @@ void	set_cmds(t_token *tokens, t_mini **mini)
 
 	curr = tokens;
 	i = -1;
-	(*mini)->cmd = ft_init_ar_cmd(tokens, (*mini));//conta i cmd e li alloca, setta pid
+	(*mini)->cmd = ft_init_ar_cmd(tokens, (*mini));
 	if (!(*mini)->cmd)
 		return ;
 	while (++i < (*mini)->process->n_pid)
 	{
-		if (make_cmd(&(*mini)->cmd[i], &curr) == -1)//TODO setta i comandi e scorre curr per i prossimi cmd se curr !NULL
+		if (make_cmd(&(*mini)->cmd[i], &curr) == -1)
 		{
-			ft_free_cmd((*mini));
+			ft_free_cmd(mini);
+			(*mini)->cmd = NULL;
 			return ;
 		}
 	}
