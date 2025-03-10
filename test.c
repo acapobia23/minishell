@@ -1,6 +1,6 @@
 #include "mini.h"
 
-static void print_token_flags(t_flag *flag)
+/*static void print_token_flags(t_flag *flag)
 {
     printf("Flags:\n");
     printf("  Single Quotes: %s\n", flag->singol_quotes ? "true" : "false");
@@ -58,4 +58,4 @@ void print_tokens(t_token *token)
         printf("---------------------\n");
         token = token->next;
     }
-}
+}*/

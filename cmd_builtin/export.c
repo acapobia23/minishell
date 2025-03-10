@@ -6,9 +6,11 @@
 /*   By: ltrento <ltrento@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 17:36:20 by ltrento           #+#    #+#             */
-/*   Updated: 2025/02/14 19:04:52 by ltrento          ###   ########.fr       */
+/*   Updated: 2025/02/23 21:24:33 by ltrento          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../mini.h"
 
 char    *return_var_value(char *str, char delimiter)
 {
@@ -79,7 +81,7 @@ void    concatenate_value(char *value, char *equal, size_t total_len)
 char	*ret_value(const char *prefix, const char *env)
 {
 	char		*value;
-	const char	*equal;
+	char        *equal;
 	size_t		key_len;
 	size_t		total_len;
 
@@ -125,7 +127,7 @@ int    print_declare_x_var(t_env *env)
     return (0);
 }
 
-int    export_builtin(t_mini * mini)
+int    export_builtin(t_mini *mini)
 {
     char    **argu;
     size_t  i;

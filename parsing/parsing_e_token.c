@@ -105,7 +105,7 @@ int	parsing(t_mini **mini, const char *input)
 		printf("set_cmd error\n");
 		return (1);
 	}
-	print_cmds((*mini)->cmd, (*mini)->process->n_pid);
+	//print_cmds((*mini)->cmd, (*mini)->process->n_pid);
 	// set_process((*mini)->process, (*mini)->cmd);
 	// ft_test(tokens, (*mini));//TODO DEBUG ONLY stampa tutti i campi delle due struct
 	clear_tokens(&tokens);// TODOfree tokens

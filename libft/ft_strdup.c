@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acapobia <acapobia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ltrento <ltrento@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 13:24:14 by acapobia          #+#    #+#             */
-/*   Updated: 2023/12/05 13:16:48 by acapobia         ###   ########.fr       */
+/*   Updated: 2025/03/01 16:08:10 by ltrento          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,18 @@ char	*ft_strdup(const char *s)
 {
 	char	*ptr;
 	int		i;
+	int		len;
 
-	i = 0;
-	ptr = (char *)malloc((ft_strlen(s) + 1) * sizeof(char));
+	if (!s)  // 🚨 Prevents a segfault if s is NULL
+		return (NULL);
+
+	len = ft_strlen(s);
+	ptr = (char *)malloc((len + 1) * sizeof(char));
 	if (!ptr)
 		return (NULL);
-	while (i < (ft_strlen(s)))
+
+	i = 0;
+	while (i < len)  // No need to call ft_strlen inside the loop
 	{
 		ptr[i] = s[i];
 		i++;
@@ -29,6 +35,7 @@ char	*ft_strdup(const char *s)
 	ptr[i] = '\0';
 	return (ptr);
 }
+
 // int main()
 // {
 // 	char *s1 = "\nollare_the_gang";

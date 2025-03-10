@@ -6,9 +6,11 @@
 /*   By: ltrento <ltrento@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 16:17:45 by ltrento           #+#    #+#             */
-/*   Updated: 2025/02/20 22:19:06 by ltrento          ###   ########.fr       */
+/*   Updated: 2025/03/06 15:45:00 by ltrento          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../mini.h"
 
 int check_var_name(char *str)
 {
@@ -21,7 +23,7 @@ int check_var_name(char *str)
     i = 0;
     while (str[i])
     {
-        if (!ft_isalnum(str[i]) || str[i] == '_')
+        if (!ft_isalnum(str[i]) && str[i] != '_')
             return (0);
         i++;
     }
@@ -39,7 +41,7 @@ int remove_env_var(t_env **env, char *arg)
     prev = NULL;
     while (current)
     {
-        if (ft_strcmp_until(current->value, arg, '=') == 0)
+        if (current->value && ft_strcmp_until(current->value, arg, '=') == 0)
         {
             if (prev)
                 prev->next = current->next;
@@ -55,21 +57,27 @@ int remove_env_var(t_env **env, char *arg)
     return (1);
 }
 
-int unset_builtin(t_mini *mini)
+int unset_builtin(t_mini **mini)
 {
-    if (!mini->cmd->arg || !mini->cmd->arg[0])
+    int i;
+    int ret;
+    
+    ret = 0;
+    i = 0;
+    if (!(*mini)->cmd->arg || !(*mini)->cmd->arg[i])
         return (0);
-    if (!mini->env)
+    if (!(*mini)->env)
         return (1);
-    while (mini->cmd->arg)
+    while ((*mini)->cmd->arg[i])
     {
-        if (!check_var_name)
+        if (!check_var_name((*mini)->cmd->arg[i]))
         {
-            printf("unset: '%s' : not a valid identifier\n", mini->cmd->(*arg));
-            return (1);
+            printf("unset: '%s' : not a valid identifier\n", (*mini)->cmd->arg[i]);
+            ret = 1;
         }
         else
-            remove_env_var(mini->env, mini->cmd->(*arg));
+            remove_env_var(&(*mini)->env, (*mini)->cmd->arg[i]);
+        i++;
     }
-    return (0);
+    return (ret);
 }

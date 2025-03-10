@@ -29,33 +29,27 @@ int	find_word_end(int start, char *input)
 
 char *ft_strcut(int start, int end, char *input)
 {
-	char	*s;
-	int		i;
-	int		len;
+    char    *s;
+    int     i;
+    int     len;
 
-	i = start;
-	if (!input)
-		return (NULL);
-	len = 0;
-	while (i < end)
-	{
-		len++;
-		i++;
-	}
-	i = start;
-	s = NULL;
-	s = (char *)malloc((len + 1) * sizeof(char));
-	if (!s)
-		return (NULL);
-	len = 0;
-	while (i < end)
-	{
-		s[len++] = input[i];
-		i++;
-	}
-	s[len] = '\0';
-	return (s);
+    if (!input || start < 0 || end <= start || end > ft_strlen(input))
+        return (NULL);
+
+    len = end - start;
+    s = (char *)malloc((len + 1) * sizeof(char));
+    if (!s)
+        return (NULL);
+    i = 0;
+    while (i < len)
+    {
+        s[i] = input[start + i];
+        i++;
+    }
+    s[len] = '\0';
+    return (s);
 }
+
 
 int	find_op_end(int start, char *input)
 {

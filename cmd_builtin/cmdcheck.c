@@ -6,144 +6,156 @@
 /*   By: ltrento <ltrento@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 00:38:20 by ltrento           #+#    #+#             */
-/*   Updated: 2025/02/21 00:38:22 by ltrento          ###   ########.fr       */
+/*   Updated: 2025/03/10 17:52:53 by ltrento          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-char *ft_strcut(int start, int end, char *input)
+#include "../mini.h"
+
+char *get_path_root(char **path, char *cmd)
 {
-	char	*s;
-	int		i;
-	int		len;
+    char *result;
+    char *tmp;
+    char *tmp_slash;
+    int len;
 
-	i = start;
-	if (!input)
-		return (NULL);
-	len = 0;
-	while (i < end)
-	{
-		len++;
-		i++;
-	}
-	i = start;
-	s = NULL;
-	s = (char *)malloc((len + 1) * sizeof(char));
-	if (!s)
-		return (NULL);
-	len = 0;
-	while (i < end)
-	{
-		s[len++] = input[i];
-		i++;
-	}
-	s[len] = '\0';
-	return (s);
-}
-
-char    *get_path_root(char **path, char *cmd)
-{
-    char    *result;
-	char	*tmp;
-    int     start;
-	int		end;
-	int		len;
-
-    if (!(*path) || !cmd)
+    if (!path || !(*path) || !cmd)
         return (NULL);
-	len = 0;
-    while ((*path)[len] && (*path)[len] != ':')
+    len = 0;
+    while ((*path)[len] && (*path)[len] != ':')  
         len++;
-	end = len + 1;
-    if (len)
-    {
-		tmp = ft_strcut(0, end, (*path));
-		if (!tmp)
-			return (NULL);
-		tmp[end - 1] = '/';
-		result = ft_strjoin((*const char)tmp, (*const char)cmd);
-		free(tmp)
-		(*path) += end;
-		if (!result)
-			return (NULL);
-		else
-			return (result);
-    }
+    tmp = ft_strcut(0, len, *path);
+    if (!tmp)
+        return (NULL);
+    tmp_slash = ft_strjoin(tmp, "/");
+    free(tmp);
+    if (!tmp_slash)
+        return (NULL);
+    result = ft_strjoin(tmp_slash, cmd);
+    free(tmp_slash);
+    if (!result)
+        return (NULL);
+    if ((*path)[len] == ':')
+        *path += (len + 1);
+    else
+        *path += len;
+    return (result);
 }
 
-t_env   *path_node(t_mini *mini)
+t_env *path_node(t_mini *mini)
 {
-    t_env   *current;
+    t_env *current;
+
+    if (!mini || !mini->env)
+        return (NULL);
 
     current = mini->env;
-    if (!mini->env || !mini->env[0] || !current)
-        return (NULL);
     while (current)
     {
         if (ft_strncmp(current->value, "PATH", 4) == 0)
-            return (current)
+            return (current);
         current = current->next;
     }
     return (NULL);
 }
 
-void    check_syscmd(t_mini **mini)
+int check_syscmd(t_mini **mini)
 {
-    t_env   *path;
-    char    *path_root;
-	int		start;
-	int		end;
+    t_env *path;
+    char *path_value;
+    char *path_iter;
 
-    path = path_node(*mini);
-    if (!path || path->value)
+    if (!mini || !(*mini) || !(*mini)->cmd || !(*mini)->cmd->cmd)
         return (-1);
-    while ((*path)->valu != '=')
-        path->value++;
-	path->value += 1;
-    while ((*path)->value)
+    path = path_node(*mini);
+    if (!path || !path->value)
+        return (-1);
+    path_value = ft_strdup(path->value + 5);
+    if (!path_value)
+        return (-1);
+    path_iter = path_value;
+    while (*path_iter)
     {
-        path_root = get_path_root(&path->value, mini->cmd);
+        char *path_root = get_path_root(&path_iter, (*mini)->cmd->cmd);
         if (path_root)
         {
             if (access(path_root, X_OK) == 0)
-            return (0);
+            {
+                free(path_root);
+                free(path_value);
+                return (0);
+            }
+            free(path_root);
         }
-        free(path_root);
     }
+    free(path_value);
     return (-1);
 }
 
-int	check_cmd(char *cmd)
+
+int check_builtin(char *cmd, t_mini **mini)
 {
-	if (ft_strncmp("cd", cmd, ft_strlen(cmd)) == 0);
-		return (0);
-	if (ft_strncmp("echo", cmd, ft_strlen(cmd)) == 0);
-		return (0);
-	if (ft_strncmp("env", cmd, ft_strlen(cmd)) == 0);
-		return (0);
-	if (ft_strncmp("exit", cmd, ft_strlen(cmd)) == 0);
-		return (0);
-	if (ft_strncmp("export", cmd, ft_strlen(cmd)) == 0);
-		return (0);
-	if (ft_strncmp("pwd", cmd, ft_strlen(cmd)) == 0);
-		return (0);
-	if (ft_strncmp("unset", cmd, ft_strlen(cmd)) == 0);
-		return (0);
-	return (check_syscmd(cmd));
+    if (!cmd || !mini || !(*mini))
+        return (0);
+
+    if (ft_strncmp("cd", cmd, ft_strlen(cmd)) == 0)
+        return (1);
+    if (ft_strncmp("echo", cmd, ft_strlen(cmd)) == 0)
+        return (1);
+    if (ft_strncmp("env", cmd, ft_strlen(cmd)) == 0)
+        return (1);
+    if (ft_strncmp("exit", cmd, ft_strlen(cmd)) == 0)
+        return (1);
+    if (ft_strncmp("export", cmd, ft_strlen(cmd)) == 0)
+        return (1);
+    if (ft_strncmp("pwd", cmd, ft_strlen(cmd)) == 0)
+        return (1);
+    if (ft_strncmp("unset", cmd, ft_strlen(cmd)) == 0)
+        return (1);
+    if (check_syscmd(mini) == 0)
+        return (1);
+    return (0);
 }
 
-void	cmd_executor(t_mini **mini)
+int exec_cmd(t_mini **mini, char *cmd)
 {
-	int	i;
-	
-	i = 0;
-	while (i < mini->process->n_pid)
-	{
-		if (check_cmd(mini->cmd->cmd) != 0)
-		{
-			printf("%s: command not valid pid = %d", mini->cmd->cmd, mini->process->n_pid);
-			free_cmd()
-			return(-1;)
-		}
-		i++;
-	//exec_cmd
+    if (!mini || !(*mini) || !cmd)
+        return (1);
+
+    if (ft_strncmp("cd", cmd, ft_strlen(cmd)) == 0)
+        return (cd_builtin((*mini)));
+    if (ft_strncmp("echo", cmd, ft_strlen(cmd)) == 0)
+        return (echo_builtin((*mini)));
+    if (ft_strncmp("env", cmd, ft_strlen(cmd)) == 0)
+        return (env_builtin(mini));
+    if (ft_strncmp("exit", cmd, ft_strlen(cmd)) == 0)
+        return (exit_builtin(mini));
+    if (ft_strncmp("export", cmd, ft_strlen(cmd)) == 0)
+        return (export_builtin((*mini)));
+    if (ft_strncmp("pwd", cmd, ft_strlen(cmd)) == 0)
+        return (pwd_builtin());
+    if (ft_strncmp("unset", cmd, ft_strlen(cmd)) == 0)
+        return (unset_builtin(mini));
+    return (syscommand(mini));
+}
+
+int cmd_executor(t_mini **mini)
+{
+    int i;
+
+    if (!mini || !(*mini) || !(*mini)->cmd || !(*mini)->cmd->cmd)
+        return (-1);
+
+    i = 0;
+    while (i < (*mini)->process->n_pid)
+    {
+        if (check_builtin((*mini)->cmd->cmd, mini) == 0)
+        {
+            printf("%s: command not found (pid = %d)\n", (*mini)->cmd->cmd, (*mini)->process->n_pid);
+            ft_free_cmd(mini);
+            return (-1);
+        }
+        i++;
+    }
+    return (exec_cmd(mini, (*mini)->cmd->cmd));
 }

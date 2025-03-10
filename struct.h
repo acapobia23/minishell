@@ -42,7 +42,7 @@ typedef struct s_cmd
 	char	**arg;
 	char	*redirect;
 	char	*file;
-	bool	flag_cmd;//vede se è un cmd o una redirect
+	bool	flag_cmd;
 }			t_cmd;
 
 typedef struct s_pid
