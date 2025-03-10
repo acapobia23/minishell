@@ -149,6 +149,8 @@ int cmd_executor(t_mini **mini)
     i = 0;
     while (i < (*mini)->process->n_pid)
     {
+        // if (check_pipe(mini) == 0)
+        //     pipe_case((*mini));//TODO
         if (check_builtin((*mini)->cmd->cmd, mini) == 0)
         {
             printf("%s: command not found (pid = %d)\n", (*mini)->cmd->cmd, (*mini)->process->n_pid);
