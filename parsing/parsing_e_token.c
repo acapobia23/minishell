@@ -96,9 +96,8 @@ int	parsing(t_mini **mini, const char *input)
 		clear_tokens(&tokens);
 		return (-1);
 	}
-	// printf("\n\nAFTER LEXER\n\n");
-	// print_tokens(tokens);
-	set_cmds(tokens, &(*mini));//TODO trasferisce i token in cmd dividendoli
+	print_tokens(tokens);
+	set_cmds(tokens, &(*mini));// trasferisce i token in cmd dividendoli
 	if (!(*mini)->cmd)
 	{
 		clear_tokens(&tokens);
@@ -106,7 +105,6 @@ int	parsing(t_mini **mini, const char *input)
 		return (1);
 	}
 	print_cmds((*mini)->cmd, (*mini)->process->n_pid);
-	// set_process((*mini)->process, (*mini)->cmd);
 	// ft_test(tokens, (*mini));//TODO DEBUG ONLY stampa tutti i campi delle due struct
 	clear_tokens(&tokens);// TODOfree tokens
 	// check_signal();//TODO

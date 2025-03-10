@@ -4,13 +4,14 @@ void	ft_free_cmd(t_mini *mini)
 {
 	int	i;
 
-	i = -1;
-	while (++i < mini->process->n_pid)
+	i = 0;
+	while (i < mini->process->n_pid)
 	{
 		ft_free_mtx(mini->cmd->arg);
 		free(mini->cmd->cmd);
 		free(mini->cmd->file);
 		free(mini->cmd->redirect);
+		i++;
 	}
 	free(mini->cmd);
 }
@@ -56,14 +57,14 @@ void	ft_clear_mini(t_mini **mini)
 		return ;
 	if ((*mini)->env)
 		ft_free_env(&(*mini)->env);
+	if ((*mini)->cmd)
+			ft_free_cmd((*mini));//TODO da vedere quando assegno cmd la struct completa
 	if ((*mini)->process)
 	{
 		if ((*mini)->process->id_current)
 			free((*mini)->process->id_current);
 		free((*mini)->process);
 	}
-	if ((*mini)->cmd)
-		ft_free_cmd(&(*mini))//TODO da vedere quando assegno cmd la struct completa
 	free((*mini));
 }
 
