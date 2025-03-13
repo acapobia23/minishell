@@ -207,6 +207,11 @@ int execute_syscommand(char *path_root, t_mini *mini)
             return (-1);
         if (pid == 0)
         {
+            if (mini->cmd->flag_cmd == true && mini->cmd->file != NULL)
+            {
+                if (do_redirect_one_cmd(mini) != 0)//TODO
+                    return (-1);
+            }
             execve(path_root, exec_argv, envp);
             exit(EXIT_FAILURE);
         }
@@ -277,5 +282,5 @@ int syscommand(t_mini **mini)
             path_value++;
     }
     free(path_copy);
-    return (1);
+    return (exec_status);
 }

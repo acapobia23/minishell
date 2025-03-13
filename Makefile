@@ -3,7 +3,8 @@ SRC =	main.c clear_functions.c handle_signal.c data_init.c parsing/parsing_e_tok
 		parsing/handle_quote_utils.c parsing/handle_dollar.c parsing/handle_dollar_utils.c parsing/quoted_dollar.c \
 		set_cdm/set_cmd.c set_cdm/set_cmd_utils.c cmd_builtin/cd.c cmd_builtin/cmdcheck.c cmd_builtin/echo.c \
 		cmd_builtin/env.c cmd_builtin/export.c cmd_builtin/pwd.c cmd_builtin/setenv_utils.c \
-		cmd_builtin/setenv.c cmd_builtin/syscommand.c cmd_builtin/unset.c cmd_builtin/exit.c
+		cmd_builtin/setenv.c cmd_builtin/syscommand.c cmd_builtin/unset.c cmd_builtin/exit.c cmd_executor.c/executor_cmd.c \
+		cmd_executor.c/redirection.c 
 		
 NAME = minishell
 LIBFT_DIR = libft
