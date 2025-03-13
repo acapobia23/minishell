@@ -6,7 +6,7 @@
 /*   By: ltrento <ltrento@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 22:15:41 by ltrento           #+#    #+#             */
-/*   Updated: 2025/03/10 17:10:35 by ltrento          ###   ########.fr       */
+/*   Updated: 2025/03/11 16:38:38 by ltrento          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,7 +214,6 @@ int execute_syscommand(char *path_root, t_mini *mini)
             waitpid(pid, &status, 0);
         free_matrix(exec_argv);
         free_matrix(envp);
-        free(path_root);
         return (0);
     }
     return (-1);
@@ -225,7 +224,9 @@ int process_command(char *path_value, t_mini *mini)
     char *path_root;
     char *next_colon;
     char *temp;
+    int     ret;
 
+    ret = 0;
     temp = path_value;
     while (temp && (*temp))  
     {
@@ -233,8 +234,9 @@ int process_command(char *path_value, t_mini *mini)
         path_root = get_path_root_cmd(temp, mini->cmd->cmd);
         if (path_root)
         {
-            execute_syscommand(path_root, mini);
-            return (0);
+            ret = execute_syscommand(path_root, mini);
+            free(path_root);
+            return (ret);
         }
         free(path_root);
         if (next_colon) 
@@ -253,6 +255,12 @@ int syscommand(t_mini **mini)
     int exec_status;
     char *path_segment;
 
+    
+    if ((*mini)->cmd->cmd[0] == '/' || (*mini)->cmd->cmd[0] == '.')
+    {
+        if (access((*mini)->cmd->cmd, X_OK) == 0)
+            return (execute_syscommand((*mini)->cmd->cmd, (*mini)));
+    }
     path = path_node(*mini);
     if (!path || !path->value)
         return (-1);

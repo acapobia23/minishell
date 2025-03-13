@@ -6,7 +6,7 @@
 /*   By: ltrento <ltrento@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 00:38:20 by ltrento           #+#    #+#             */
-/*   Updated: 2025/03/10 17:52:53 by ltrento          ###   ########.fr       */
+/*   Updated: 2025/03/11 16:20:51 by ltrento          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,11 @@ int check_syscmd(t_mini **mini)
 
     if (!mini || !(*mini) || !(*mini)->cmd || !(*mini)->cmd->cmd)
         return (-1);
+    if ((*mini)->cmd->cmd[0] == '/' || (*mini)->cmd->cmd[0] == '.')
+    {
+        if (access((*mini)->cmd->cmd, X_OK) == 0)
+            return (0);
+    }
     path = path_node(*mini);
     if (!path || !path->value)
         return (-1);
@@ -147,7 +152,7 @@ int cmd_executor(t_mini **mini)
         return (-1);
 
     i = 0;
-    while (i < (*mini)->process->n_pid)
+    while (i < (*mini)->process->n_pid) // IMPLEMENTARE PER REDIRECT E PIPE!!!
     {
         if (check_builtin((*mini)->cmd->cmd, mini) == 0)
         {
