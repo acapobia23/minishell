@@ -60,4 +60,43 @@ void print_tokens(t_token *token)
     }
 }*/
 
+static int red_heredoc(t_mini *mini)
+{
+    int fd;
+    char *line;
 
+    fd = open("/tmp/heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd < 0)
+    {
+        printf("redirection error: fd invalid\n");
+        return (-1);
+    }
+    printf("Heredoc (type '%s' to stop):\n", mini->cmd->file);
+    while (1)
+    {
+        line = readline("> ");
+        if (!line || strcmp(line, mini->cmd->file) == 0) // Stop when delimiter is entered
+        {
+            free(line);
+            break;
+        }
+        write(fd, line, strlen(line));
+        write(fd, "\n", 1);
+        free(line);
+    }
+    close(fd);
+    // Open heredoc file for reading and redirect stdin
+    fd = open("/tmp/heredoc_tmp", O_RDONLY);
+    if (fd < 0)
+    {
+        printf("redirection error: unable to open heredoc file\n");
+        return (-1);
+    }
+    if (dup2(fd, STDIN_FILENO) < 0)
+    {
+        printf("dup2 error: fd invalid\n");
+        return (-1);
+    }
+    close(fd);
+    return (0);
+}
