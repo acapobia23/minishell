@@ -26,6 +26,11 @@ extern volatile sig_atomic_t	g_received_signal;
 
 /*void print_cmds(t_cmd *cmds, int size);
 void print_tokens(t_token *token);//test only*/
+/*executor*/
+int	            one_cmd(t_mini **mini);
+int	            pipe_case(t_mini **mini);
+int             do_redirect_one_cmd(t_mini *mini);
+/*cmd init*/
 int				make_cmd(t_cmd *cmd, t_token **curr);
 void			set_cmds(t_token *tokens, t_mini **mini);
 void			put_arg_cmd(t_token **curr, t_cmd *cmd);

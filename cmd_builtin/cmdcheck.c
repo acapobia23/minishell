@@ -6,7 +6,7 @@
 /*   By: ltrento <ltrento@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 00:38:20 by ltrento           #+#    #+#             */
-/*   Updated: 2025/03/11 16:20:51 by ltrento          ###   ########.fr       */
+/*   Updated: 2025/03/17 14:43:05 by ltrento          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,29 +98,7 @@ int check_syscmd(t_mini **mini)
 }
 
 
-int check_builtin(char *cmd, t_mini **mini)
-{
-    if (!cmd || !mini || !(*mini))
-        return (0);
 
-    if (ft_strncmp("cd", cmd, ft_strlen(cmd)) == 0)
-        return (1);
-    if (ft_strncmp("echo", cmd, ft_strlen(cmd)) == 0)
-        return (1);
-    if (ft_strncmp("env", cmd, ft_strlen(cmd)) == 0)
-        return (1);
-    if (ft_strncmp("exit", cmd, ft_strlen(cmd)) == 0)
-        return (1);
-    if (ft_strncmp("export", cmd, ft_strlen(cmd)) == 0)
-        return (1);
-    if (ft_strncmp("pwd", cmd, ft_strlen(cmd)) == 0)
-        return (1);
-    if (ft_strncmp("unset", cmd, ft_strlen(cmd)) == 0)
-        return (1);
-    if (check_syscmd(mini) == 0)
-        return (1);
-    return (0);
-}
 
 int exec_cmd(t_mini **mini, char *cmd)
 {
@@ -144,23 +122,16 @@ int exec_cmd(t_mini **mini, char *cmd)
     return (syscommand(mini));
 }
 
+
 int cmd_executor(t_mini **mini)
 {
-    int i;
-
     if (!mini || !(*mini) || !(*mini)->cmd || !(*mini)->cmd->cmd)
         return (-1);
-
-    i = 0;
-    while (i < (*mini)->process->n_pid) // IMPLEMENTARE PER REDIRECT E PIPE!!!
+    if ((*mini)->process->n_pid == 1)
     {
-        if (check_builtin((*mini)->cmd->cmd, mini) == 0)
-        {
-            printf("%s: command not found (pid = %d)\n", (*mini)->cmd->cmd, (*mini)->process->n_pid);
-            ft_free_cmd(mini);
-            return (-1);
-        }
-        i++;
+        (*mini)->exit_code = one_cmd(&(*mini));
+        return (0);
     }
-    return (exec_cmd(mini, (*mini)->cmd->cmd));
+    // (*mini)->exit_code = pipe_case(&(*mini));//TODO
+    return (0);
 }
