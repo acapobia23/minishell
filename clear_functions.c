@@ -2,48 +2,27 @@
 
 void ft_free_cmd(t_mini **mini)
 {
-    t_cmd *cmd;
-    int j;
-	int i;
+	int	i;
 
-    if (!mini || !(*mini) || !(*mini)->cmd)
-        return;
-    cmd = (*mini)->cmd;
-	i = 0;
-	while (cmd[i].cmd)
+	i = -1;
+	if (!(*mini) || !(*mini)->cmd)
+		return ;
+	while (++i < (*mini)->process->n_pid)
 	{
-    	if (cmd->cmd)
+		if ((*mini)->cmd[i].cmd)
+			free((*mini)->cmd[i].cmd);
+		if ((*mini)->cmd[i].arg)
+			ft_free_mtx((*mini)->cmd[i].arg);
+		if ((*mini)->cmd[i].flag_cmd == true)
 		{
-        	free(cmd->cmd);
-        	cmd->cmd = NULL;
-    	}
-    	if (cmd->arg)
-		{
-        	j = 0;
-        	while (cmd->arg[j])
-			{
-            	free(cmd->arg[j]);
-            	cmd->arg[j] = NULL;
-            	j++;
-        	}
-        	free(cmd->arg);
-    		cmd->arg = NULL;
-    	}
-    	if (cmd->redirect)
-		{
-        	free(cmd->redirect);
-        	cmd->redirect = NULL;
-    	}
-    	if (cmd->file)
-		{
-    	    free(cmd->file);
-        	cmd->file = NULL;
+			if ((*mini)->cmd[i].file)
+				free((*mini)->cmd[i].file);
+			if ((*mini)->cmd[i].redirect)
+				free((*mini)->cmd[i].redirect);
 		}
-		i++;
 	}
-	free(cmd);
-    (*mini)->cmd = NULL;
-
+	free((*mini)->cmd);
+	(*mini)->cmd = NULL;
 }
 
 
@@ -107,6 +86,11 @@ void	ft_clear_mini(t_mini **mini)
 		ft_free_env(&(*mini)->env);
 		(*mini)->env = NULL;
 	}
+	if ((*mini)->cmd)
+	{
+		ft_free_cmd(mini);
+		(*mini)->cmd = NULL;
+	}
 	if ((*mini)->process)
 	{
 		if ((*mini)->process->id_current)
@@ -116,11 +100,6 @@ void	ft_clear_mini(t_mini **mini)
 		}
 		free((*mini)->process);
 		(*mini)->process = NULL;
-	}
-	if ((*mini)->cmd)
-	{
-		ft_free_cmd(mini);
-		(*mini)->cmd = NULL;
 	}
 	free((*mini));
 	(*mini) = NULL;

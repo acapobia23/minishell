@@ -64,6 +64,7 @@ char **convert_env_list_to_array(t_env *env_list)
     char **envp;
 
     temp = env_list;
+    envp = NULL;
     while (temp)
     {
         i++;
@@ -209,7 +210,7 @@ int execute_syscommand(char *path_root, t_mini *mini)
         {
             if (mini->cmd->flag_cmd == true && mini->cmd->file != NULL)
             {
-                if (do_redirect_one_cmd(mini) != 0)//TODO
+                if (do_redirect_one_cmd(mini) != 0)
                     return (-1);
             }
             execve(path_root, exec_argv, envp);

@@ -28,8 +28,20 @@ extern volatile sig_atomic_t	g_received_signal;
 void print_tokens(t_token *token);//test only*/
 /*executor*/
 int	            one_cmd(t_mini **mini);
+void	        ft_free_pipes(int **pipes, int size);
+t_cmd	        *ft_cpy_cmd(t_cmd cmd);
 int	            pipe_case(t_mini **mini);
+void	        ft_free_cpy(t_mini **mini);
+t_mini	        *ft_copy_mini(t_mini *mini, int curr_cmd);
 int             do_redirect_one_cmd(t_mini *mini);
+void	        builtin_exec(t_mini **orig, int curr_cmd);
+void	        process_exec(t_mini **mini, int curr_cmd);
+int	            pipe_loop(int n_cmd, int **pipes, t_mini **mini);
+int	            check_redirect_copy(t_mini **copy);
+int             ft_isbuiltin(char *cmd);
+int	            ft_free_pipe(int **pipes, const char *error, int size);
+void	        close_pipe(int **pipes, int n_cmd);
+int	            ft_strcmp(const char *s1, const char *s2);
 /*cmd init*/
 int				make_cmd(t_cmd *cmd, t_token **curr);
 void			set_cmds(t_token *tokens, t_mini **mini);
@@ -68,6 +80,7 @@ char 			*ft_strcut(int start, int end, char *input);
 t_token_type	find_token_type(char c);
 int				parsing(t_mini **mini, const char *input);
 /*init*/
+t_env	        *env_init(char **envp);
 void			ft_free_env(t_env **env);
 int				setup_mini(t_mini **mini,char **envp);
 void			ft_clear_mini(t_mini **mini);
@@ -75,6 +88,7 @@ void			ft_exit(int	exit_code, char	*s, t_mini **mini);
 void			case_sigint(int sig);
 void			setup_signal();
 /*check_execute_cmd*/
+char **convert_env_list_to_array(t_env *env_list);
 int	cmd_executor(t_mini **mini);
 int	check_cmnd(char *cmd, t_mini **mini);
 int    check_syscmd(t_mini **mini);

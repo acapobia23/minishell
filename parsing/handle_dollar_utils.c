@@ -50,7 +50,6 @@ static char *ft_new_str(char *old,  char *value, int start)
 	int		j;
 
 	len = ft_len_dollar(old, value);
-	printf("len : %i\nold : %s\nvalue : %s\n", len, old, value);
 	new = ft_calloc((len + 1), sizeof(char));
 	if (!new)
 		return (NULL);
