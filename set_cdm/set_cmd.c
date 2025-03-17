@@ -37,8 +37,6 @@ int	make_cmd(t_cmd *cmd, t_token **curr)
 			put_arg_cmd(&(*curr), cmd);
 		counter++;
 	}
-	// if (check_cmd(cmd) == -1)
-	// 	return (-1);
 	if ((*curr))
 		(*curr) = (*curr)->next;
 	return (0);

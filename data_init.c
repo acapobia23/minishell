@@ -9,6 +9,7 @@ static t_env	*ft_new_env(const char	*str)
 	if (!new)
 		return (NULL);
 	new->value = ft_strdup(str);
+	new->next = NULL;
 	if (!new->value)
 	{
 		free(new);
@@ -17,7 +18,7 @@ static t_env	*ft_new_env(const char	*str)
 	return (new);
 }
 
-static t_env	*env_init(char **envp)
+t_env	*env_init(char **envp)
 {
 	t_env	*tmp;
 	t_env	*env;

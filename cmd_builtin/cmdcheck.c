@@ -92,41 +92,78 @@ int check_syscmd(t_mini **mini)
     return (-1);
 }
 
-
-
-
 int exec_cmd(t_mini **mini, char *cmd)
 {
     if (!mini || !(*mini) || !cmd)
-        return (1);
-
+    return (1);
+    
     if (ft_strncmp("cd", cmd, ft_strlen(cmd)) == 0)
-        return (cd_builtin((*mini)));
+    return (cd_builtin((*mini)));
     if (ft_strncmp("echo", cmd, ft_strlen(cmd)) == 0)
-        return (echo_builtin((*mini)));
+    return (echo_builtin((*mini)));
     if (ft_strncmp("env", cmd, ft_strlen(cmd)) == 0)
-        return (env_builtin(mini));
+    return (env_builtin(mini));
     if (ft_strncmp("exit", cmd, ft_strlen(cmd)) == 0)
-        return (exit_builtin(mini));
+    return (exit_builtin(mini));
     if (ft_strncmp("export", cmd, ft_strlen(cmd)) == 0)
-        return (export_builtin((*mini)));
+    return (export_builtin((*mini)));
     if (ft_strncmp("pwd", cmd, ft_strlen(cmd)) == 0)
-        return (pwd_builtin());
+    return (pwd_builtin());
     if (ft_strncmp("unset", cmd, ft_strlen(cmd)) == 0)
-        return (unset_builtin(mini));
+    return (unset_builtin(mini));
     return (syscommand(mini));
 }
 
+static int check_builtin(char *cmd, t_mini **mini)
+{
+    if (!cmd || !mini || !(*mini))
+        return (0);
+
+    if (ft_strncmp("cd", cmd, ft_strlen(cmd)) == 0)
+        return (1);
+    if (ft_strncmp("echo", cmd, ft_strlen(cmd)) == 0)
+        return (1);
+    if (ft_strncmp("env", cmd, ft_strlen(cmd)) == 0)
+        return (1);
+    if (ft_strncmp("exit", cmd, ft_strlen(cmd)) == 0)
+        return (1);
+    if (ft_strncmp("export", cmd, ft_strlen(cmd)) == 0)
+        return (1);
+    if (ft_strncmp("pwd", cmd, ft_strlen(cmd)) == 0)
+        return (1);
+    if (ft_strncmp("unset", cmd, ft_strlen(cmd)) == 0)
+        return (1);
+    if (check_syscmd(mini) == 0)
+        return (1);
+    return (0);
+}
+
+int	one_cmd(t_mini **mini)
+{
+    int	exit_code;
+
+    if (check_builtin((*mini)->cmd->cmd, &(*mini)) == 1)
+    {
+        exit_code = exec_cmd(mini, (*mini)->cmd->cmd);
+        return (exit_code);
+    }
+    else
+    {
+        printf("%s: command not found (pid = %d)\n", (*mini)->cmd->cmd, (*mini)->process->n_pid);
+        return (-1);
+    }
+    return (0);
+}
 
 int cmd_executor(t_mini **mini)
 {
     if (!mini || !(*mini) || !(*mini)->cmd || !(*mini)->cmd->cmd)
-        return (-1);
+    return (-1);
     if ((*mini)->process->n_pid == 1)
     {
         (*mini)->exit_code = one_cmd(&(*mini));
         return (0);
     }
-    // (*mini)->exit_code = pipe_case(&(*mini));//TODO
+    (*mini)->exit_code = pipe_case(&(*mini));
     return (0);
 }
