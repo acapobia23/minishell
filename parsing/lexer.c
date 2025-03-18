@@ -22,10 +22,34 @@ int	find_flag(t_flag *flag, char *c)
 	return (-1);
 }
 
+static int	ft_check_double_pipe(t_token *tokens)
+{
+	t_token	*curr;
+
+	curr = tokens;
+	if (!curr)
+		return (-1);
+	while (curr)
+	{
+		if (curr->flag->pipe == true)
+		{
+			if (curr->next == NULL || curr->next->flag->pipe == true)
+			{
+				printf("double pipe i can't process the input\n");
+				return (-1);
+			}
+		}
+		curr = curr->next;
+	}
+	return (0);
+}
+
 int	lexer_tokens(t_token **tokens, t_mini *mini)
 {
 	t_token	*curr;
 
+	if (ft_check_double_pipe((*tokens)) == -1)
+		return (-1);
 	curr = (*tokens);
 	while (curr)
 	{
